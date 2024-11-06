@@ -1,5 +1,7 @@
 //RRaffin, UB, LIB
 //Exemple simple : description d'un triangle, extractions des informations
+#include "example_triangle.h"
+
 #include <string>
 #include <CGAL/Simple_cartesian.h>
 #include <CGAL/Surface_mesh.h>
@@ -10,7 +12,7 @@ typedef CGAL::Simple_cartesian<double> K;
 typedef CGAL::Surface_mesh<K::Point_3> Mesh;
 typedef Mesh::Vertex_index vertex_descriptor;
 
-int main()
+/*int main()
 {
 
 	//création d'un objet maillage
@@ -50,4 +52,4 @@ int main()
 	}
 
 return 0;
-}
+}*/

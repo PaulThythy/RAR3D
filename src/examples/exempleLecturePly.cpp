@@ -6,7 +6,8 @@
 //Compilation: g++ -Wall -I. exempleLecturePly.cpp tinyply.cpp -o exempleLecturePly
 //Exemple: ./exempleLecturePly
 
-#include "tinyply.h"
+#include "exempleLecturePly.h"
+#include "tinyply/tinyply.h"
 #include "plyUtils.hpp"
 
 using namespace tinyply;
@@ -52,7 +53,7 @@ void write_ply_example(const std::string & filename)
 
 
 //Lecture d'un fichier PLY dont le nom est passé en paramètre
-void read_ply_file(const std::string & filepath, const bool preload_into_memory = true)
+void read_ply_file(const std::string & filepath, bool preload_into_memory)
 {
     std::unique_ptr<std::istream> file_stream;
     std::vector<uint8_t> byte_buffer;
@@ -194,7 +195,7 @@ void read_ply_file(const std::string & filepath, const bool preload_into_memory 
     }
 }
 
-int main(int argc, char *argv[])
+/*int main(int argc, char *argv[])
 {
     // Circular write-read
     write_ply_example("example_cube");
@@ -203,4 +204,4 @@ int main(int argc, char *argv[])
     read_ply_file("../models/surface-L2-clean.ply"); //exemple de reconstruction par photogrammétrie
     
     return EXIT_SUCCESS;
-}
+}*/
