@@ -15,20 +15,23 @@ typedef CGAL::Surface_mesh<K::Point_3> Mesh;
 typedef Mesh::Vertex_index vertex_descriptor;
 typedef Mesh::Face_index face_descriptor;
 
-int main() {
-    //TODO nombre de sommets et de faces
+int verticesValency[5];
+float verticesDiadricAngles[5];
+float facesArea[5];
 
-    //TODO histogramme de la valence des sommets
+int main()
+{
+    // TODO nombre de sommets et de faces
 
-    //TODO histogramme des angles dièdres
+    // TODO histogramme de la valence des sommets
 
-    //TODO calculer les aires des faces
+    // TODO histogramme des angles dièdres
 
-    //TODO calculer les cartes de courbure et en prendre 
-    //quelques images de "référence"
+    // TODO calculer les aires des faces
+
+    // TODO calculer les cartes de courbure et en prendre quelques images de "référence" (meshlab peut le faire)
 
     Mesh m;
-    
     read_ply_file("models/originalHead_VenusMilo.ply");
 
     return 0;

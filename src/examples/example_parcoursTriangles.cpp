@@ -1,5 +1,5 @@
-//RRaffin, UB, LIB
-//Exemple simple : description d'un triangle, extractions des informations
+// RRaffin, UB, LIB
+// Exemple simple : description d'un triangle, extractions des informations
 #include "example_parcoursTriangles.h"
 
 #include <string>
@@ -7,7 +7,7 @@
 #include <CGAL/Surface_mesh.h>
 #include <CGAL/boost/graph/generators.h>
 
-//futur type des coordonnées
+// futur type des coordonnées
 typedef CGAL::Simple_cartesian<double> K;
 typedef CGAL::Surface_mesh<K::Point_3> Mesh;
 typedef Mesh::Vertex_index vertex_descriptor;
@@ -23,8 +23,8 @@ typedef Mesh::Face_index face_descriptor;
 	vertex_descriptor v0 = m.add_vertex(K::Point_3(0,0,0));
 	vertex_descriptor v1 = m.add_vertex(K::Point_3(2,0,0));
 	vertex_descriptor v2 = m.add_vertex(K::Point_3(2,2,0));
-	vertex_descriptor v3 = m.add_vertex(K::Point_3(0,2,0));  
-	
+	vertex_descriptor v3 = m.add_vertex(K::Point_3(0,2,0));
+
 	//création de la face
 	m.add_face(v0, v1, v2);
 	m.add_face(v2, v3, v0);
@@ -33,7 +33,7 @@ typedef Mesh::Face_index face_descriptor;
 	std::cout << "Nombres de sommets : " << num_vertices(m) << std::endl;
 	std::cout << "Nombres d'arêtes : " << num_edges(m) << std::endl;
 	std::cout << "Nombres de faces : " << num_faces(m) << std::endl;
-  
+
 	//utilisation de propriétés : "location" référence les positions
 	Mesh::Property_map<vertex_descriptor, K::Point_3> location = m.points();
 
