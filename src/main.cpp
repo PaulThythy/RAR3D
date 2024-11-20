@@ -32,7 +32,9 @@ int main()
     // TODO calculer les cartes de courbure et en prendre quelques images de "référence" (meshlab peut le faire)
 
     Mesh m;
-    read_ply_file("models/originalHead_VenusMilo.ply");
+    read_ply_file("models/example_cube-ascii.ply", false);
+
+    
 
     return 0;
 }
