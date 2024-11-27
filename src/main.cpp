@@ -113,8 +113,7 @@ int main()
     gp << "plot '-' with boxes title 'Valence'\n";
     gp.send1d(data);
 
-    std::cin.get(); // Pause pour garder la fenêtre ouverte
-    return 0;
+    std::cin.get();
 
     return 0;
 }
