@@ -98,25 +98,23 @@ int main()
         histAir[airs[i]]++;
     }
 
-    std::cout << "sistValence:\n";
 
-    for(int i = 0; i < histValence.size(); ++i)
-        std::cout << histValence[i] << " ";
+    Gnuplot gp;
+    std::vector<std::pair<int, int>> data;
 
-    std::cout << "\n";
+    for (size_t i = 0; i < histValence.size(); ++i) {
+        data.emplace_back(i, histValence[i]);
+    }
 
-    std::cout << "histAir:\n";
+    gp << "set title 'Histogramme des valences des sommets'\n";
+    gp << "set xlabel 'Valence'\n";
+    gp << "set ylabel 'Nombre de sommets'\n";
+    gp << "set style fill solid 0.5\n";
+    gp << "plot '-' with boxes title 'Valence'\n";
+    gp.send1d(data);
 
-    for(int i = 0; i < histAir.size(); ++i)
-        std::cout << histAir[i] << " ";
-
-    std::cout << "\n";
-
-    Gnuplot plotVertexValency;
-    plotVertexValency << "Valence des sommets\n";
-
-    plotVertexValency.send(histValence);
-    std::cin.get();
+    std::cin.get(); // Pause pour garder la fenêtre ouverte
+    return 0;
 
     return 0;
 }
