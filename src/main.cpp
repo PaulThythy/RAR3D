@@ -99,19 +99,35 @@ int main()
     }
 
 
-    Gnuplot gp;
-    std::vector<std::pair<int, int>> data;
+    Gnuplot gpVertexValency;
+    std::vector<std::pair<int, int>> dataValency;
 
     for (size_t i = 0; i < histValence.size(); ++i) {
-        data.emplace_back(i, histValence[i]);
+        dataValency.emplace_back(i, histValence[i]);
     }
 
-    gp << "set title 'Histogramme des valences des sommets'\n";
-    gp << "set xlabel 'Valence'\n";
-    gp << "set ylabel 'Nombre de sommets'\n";
-    gp << "set style fill solid 0.5\n";
-    gp << "plot '-' with boxes title 'Valence'\n";
-    gp.send1d(data);
+    gpVertexValency << "set term wxt 1\n";
+    gpVertexValency << "set title 'Histogramme des valences des sommets'\n";
+    gpVertexValency << "set xlabel 'Valence'\n";
+    gpVertexValency << "set ylabel 'Nombre de sommets'\n";
+    gpVertexValency << "set style fill solid 0.5\n";
+    gpVertexValency << "plot '-' with boxes title 'Valence'\n";
+    gpVertexValency.send1d(dataValency);
+
+    Gnuplot gpFaceArea;
+    std::vector<std::pair<int, int>> dataArea;
+
+    for (size_t i = 0; i < histAir.size(); ++i) {
+        dataArea.emplace_back(i, histAir[i]);
+    }
+
+    gpFaceArea << "set term wxt 2\n";
+    gpFaceArea << "set title 'Histogramme des aires des faces'\n";
+    gpFaceArea << "set xlabel 'Aire'\n";
+    gpFaceArea << "set ylabel 'Nombre de faces'\n";
+    gpFaceArea << "set style fill solid 0.5\n";
+    gpFaceArea << "plot '-' with boxes title 'Aire'\n";
+    gpFaceArea.send1d(dataArea);
 
     std::cin.get();
 
