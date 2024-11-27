@@ -1,6 +1,10 @@
 # RAR3D
 TP Reconstitution, Analyse et Restitution 3D
 
+## Prérequis
+```bash
+sudo apt update ; sudo apt install libcgal-dev cmake build-essential
+```
 
 ## Enoncé :
 
