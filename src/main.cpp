@@ -18,6 +18,7 @@
 
 typedef CGAL::Simple_cartesian<double> Kernel;
 typedef Kernel::Point_3 Point;
+typedef Kernel::Vector_3 Vector;
 typedef CGAL::Surface_mesh<Point> Mesh;
 
 const std::string filePath = "models/cube_blender.ply";
@@ -28,11 +29,23 @@ double triangle_area(const Point &p1, const Point &p2, const Point &p3) {
     return std::sqrt(CGAL::cross_product(v1, v2).squared_length()) / 2.0;
 }
 
+Vector triangle_normal(const Point &p1, const Point &p2, const Point &p3) {
+    Kernel::Vector_3 v1 = p2 - p1;
+    Kernel::Vector_3 v2 = p3 - p1;
+    return CGAL::cross_product(v1, v2);
+}
+
+double dihedral_angle(const Vector &n1, const Vector &n2) {
+    return std::acos(n1 * n2 / (std::sqrt(n1.squared_length()) * std::sqrt(n2.squared_length())));
+}
+
 std::vector<int> valences;
 std::vector<int> airs;
+std::vector<double> dihedralAngles;
 
 std::vector<int> histValence;
 std::vector<int> histAir;
+std::vector<int> histDihedral;
 
 int main()
 {
@@ -98,6 +111,40 @@ int main()
         histAir[airs[i]]++;
     }
 
+    for (auto edge : mesh.edges()) {
+        if (!mesh.is_border(edge)) {
+            auto h1 = mesh.halfedge(edge);
+            auto h2 = mesh.opposite(h1);
+
+            auto f1 = mesh.face(h1);
+            auto f2 = mesh.face(h2);
+
+            auto v1 = mesh.point(mesh.target(mesh.halfedge(f1)));
+            auto v2 = mesh.point(mesh.target(mesh.next(mesh.halfedge(f1))));
+            auto v3 = mesh.point(mesh.target(mesh.next(mesh.next(mesh.halfedge(f1)))));
+
+            auto v4 = mesh.point(mesh.target(mesh.halfedge(f2)));
+            auto v5 = mesh.point(mesh.target(mesh.next(mesh.halfedge(f2))));
+            auto v6 = mesh.point(mesh.target(mesh.next(mesh.next(mesh.halfedge(f2)))));
+
+            Vector n1 = triangle_normal(v1, v2, v3);
+            Vector n2 = triangle_normal(v4, v5, v6);
+
+            double angle = dihedral_angle(n1, n2);
+            dihedralAngles.push_back(angle);
+        }
+    }
+
+    const int numBins = 36; // Diviser les angles entre 0 et pi en 36 intervalles
+    histDihedral.resize(numBins, 0);
+
+    for (double angle : dihedralAngles) {
+        int binIndex = static_cast<int>((angle / M_PI) * numBins);
+        if (binIndex >= 0 && binIndex < numBins) {
+            histDihedral[binIndex]++;
+        }
+    }
+
 
     Gnuplot gpVertexValency;
     std::vector<std::pair<int, int>> dataValency;
@@ -128,6 +175,21 @@ int main()
     gpFaceArea << "set style fill solid 0.5\n";
     gpFaceArea << "plot '-' with boxes title 'Aire'\n";
     gpFaceArea.send1d(dataArea);
+
+    Gnuplot gpDihedralAngles;
+    std::vector<std::pair<double, int>> dataDihedralAngles;
+
+    for (int i = 0; i < numBins; ++i) {
+        dataDihedralAngles.emplace_back((i + 0.5) * (M_PI / numBins), histDihedral[i]);
+    }
+
+    gpDihedralAngles << "set term wxt 3\n";
+    gpDihedralAngles << "set title 'Histogramme des angles dihèdres'\n";
+    gpDihedralAngles << "set xlabel 'angles dihèdre'\n";
+    gpDihedralAngles << "set ylabel 'Nombre arêtes'\n";
+    gpDihedralAngles << "set style fill solid 0.5\n";
+    gpDihedralAngles << "plot '-' with boxes title 'angle dihèdre'\n";
+    gpDihedralAngles.send1d(dataDihedralAngles);
 
     std::cin.get();
 
