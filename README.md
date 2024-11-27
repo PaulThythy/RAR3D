@@ -3,7 +3,7 @@ TP Reconstitution, Analyse et Restitution 3D
 
 ## Prérequis
 ```bash
-sudo apt update ; sudo apt install libcgal-dev cmake build-essential
+sudo apt update ; sudo apt install libcgal-dev cmake build-essential libboost-all-dev libgnuplot-iostream-dev
 ```
 
 ## Enoncé :

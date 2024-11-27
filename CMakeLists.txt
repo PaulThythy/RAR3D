@@ -8,5 +8,7 @@ file(GLOB_RECURSE headers src/**.h)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
+find_package(Boost REQUIRED COMPONENTS iostreams)
+
 add_executable(${PROJECT_NAME} ${sources} ${headers})
-target_link_libraries(${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME} PRIVATE Boost::iostreams)

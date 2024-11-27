@@ -8,6 +8,8 @@
 #include "plyUtils.hpp"
 #include "tinyply/tinyply.h"
 
+#include <gnuplot-iostream.h>
+
 #include <CGAL/Simple_cartesian.h>
 #include <CGAL/Surface_mesh.h>
 #include <CGAL/IO/PLY/PLY_reader.h>
@@ -109,6 +111,12 @@ int main()
         std::cout << histAir[i] << " ";
 
     std::cout << "\n";
+
+    Gnuplot plotVertexValency;
+    plotVertexValency << "Valence des sommets\n";
+
+    plotVertexValency.send(histValence);
+    std::cin.get();
 
     return 0;
 }
