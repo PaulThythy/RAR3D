@@ -13,12 +13,10 @@
 #include "MeshAnalysis.h"
 #include "Histogram.h"
 
-const std::string filePath = "models/cube_blender.ply";
+const std::string filePath = "models/originalHead_VenusMilo.ply";
 
 int main()
 {
-    // TODO calculer les cartes de courbure et en prendre quelques images de "référence" (meshlab peut le faire)
-
     Mesh mesh;
     if (!loadMeshFromFile(filePath, mesh)) {
         std::cerr << "Erreur : Impossible de lire le fichier PLY." << std::endl;
