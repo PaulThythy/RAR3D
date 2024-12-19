@@ -1,11 +1,5 @@
 #include <iostream>
-#include <vector>
 #include <string>
-#include <fstream>
-#include <memory>
-#include <stdexcept>
-
-#include "plyUtils.hpp"
 #include "tinyply/tinyply.h"
 
 #include <gnuplot-iostream.h>
@@ -15,7 +9,7 @@
 
 const std::string filePath = "models/originalHead_VenusMilo.ply";
 
-int main()
+int main(int argc, char *argv[])
 {
     Mesh mesh;
     if (!loadMeshFromFile(filePath, mesh)) {
