@@ -1,10 +1,16 @@
 #include "MeshAnalysis.h"
 #include <CGAL/IO/PLY/PLY_reader.h>
+#include <CGAL/IO/OBJ.h>
 #include <cmath>
 
-bool loadMeshFromFile(const std::string &filePath, Mesh &mesh) {
+bool loadPLY(const std::string &filePath, Mesh &mesh) {
     std::ifstream input(filePath);
     return input && CGAL::IO::read_PLY(input, mesh);
+}
+
+bool loadOBJ(const std::string &filePath, Mesh &mesh) {
+    std::ifstream input(filePath);
+    return input && CGAL::IO::read_OBJ(input, mesh);
 }
 
 void printMeshInfos(const Mesh &mesh) {

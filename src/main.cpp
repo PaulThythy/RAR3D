@@ -7,13 +7,13 @@
 #include "MeshAnalysis.h"
 #include "Histogram.h"
 
-const std::string filePath = "models/originalHead_VenusMilo.ply";
+const std::string filePath = "models/suzanne.obj";
 
 int main(int argc, char *argv[])
 {
     Mesh mesh;
-    if (!loadMeshFromFile(filePath, mesh)) {
-        std::cerr << "Erreur : Impossible de lire le fichier PLY." << std::endl;
+    if (!loadOBJ(filePath, mesh)) {
+        std::cerr << "Erreur : Impossible de lire le fichier." << std::endl;
         return EXIT_FAILURE;
     }
 
