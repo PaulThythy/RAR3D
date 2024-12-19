@@ -6,13 +6,33 @@ set(CMAKE_CXX_STANDARD 23)
 file(GLOB_RECURSE sources src/**.cpp)
 file(GLOB_RECURSE headers src/**.h)
 
+set(MVE_BUILD_DIR ${CMAKE_BINARY_DIR}/libs/mve)
+
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/libs/gnuplot-iostream)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/gnuplot-iostream)
-#add_subdirectory(${CMAKE_SOURCE_DIR}/libs/mve)
 
 find_package(Boost REQUIRED COMPONENTS iostreams)
 
 add_executable(${PROJECT_NAME} ${sources} ${headers})
 target_link_libraries(${PROJECT_NAME} PRIVATE Boost::iostreams)
+
+add_custom_command(
+        OUTPUT ${MVE_BUILD_DIR}/libmve.a
+        COMMAND make -C ${CMAKE_SOURCE_DIR}/libs/mve -j8
+        WORKING_DIRECTORY ${MVE_BUILD_DIR}
+        COMMENT "Building MVE..."
+)
+
+add_custom_target(MVE ALL DEPENDS ${MVE_BUILD_DIR}/libmve.a)
+
+file(GLOB_RECURSE MVE_LIBS "${CMAKE_SOURCE_DIR}/libs/mve/libs/**.a")
+
+add_custom_command(
+        TARGET MVE POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy ${MVE_LIBS} ${CMAKE_BINARY_DIR}/libs/mve
+        COMMENT "Copying compiled .a files to ${CMAKE_BINARY_DIR}/libs/mve"
+)
+
+add_dependencies(${PROJECT_NAME} MVE)
