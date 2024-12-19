@@ -7,6 +7,10 @@ file(GLOB_RECURSE sources src/**.cpp)
 file(GLOB_RECURSE headers src/**.h)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
+include_directories(${CMAKE_SOURCE_DIR}/libs/gnuplot-iostream)
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/libs/gnuplot-iostream)
+#add_subdirectory(${CMAKE_SOURCE_DIR}/libs/mve)
 
 find_package(Boost REQUIRED COMPONENTS iostreams)
 
