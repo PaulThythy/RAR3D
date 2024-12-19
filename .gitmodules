@@ -1,3 +1,6 @@
 [submodule "libs/gnuplot-iostream"]
 	path = libs/gnuplot-iostream
 	url = https://github.com/dstahlke/gnuplot-iostream.git
+[submodule "libs/mve"]
+	path = libs/mve
+	url = https://github.com/simonfuhrmann/mve.git
