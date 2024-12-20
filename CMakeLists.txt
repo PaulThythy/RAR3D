@@ -10,13 +10,15 @@ set(MVE_BUILD_DIR ${CMAKE_BINARY_DIR}/libs/mve)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/libs/gnuplot-iostream)
+include_directories(${CMAKE_SOURCE_DIR}/libs/eigen)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/gnuplot-iostream)
+add_subdirectory(${CMAKE_SOURCE_DIR}/libs/eigen)
 
 find_package(Boost REQUIRED COMPONENTS iostreams)
 
 add_executable(${PROJECT_NAME} ${sources} ${headers})
-target_link_libraries(${PROJECT_NAME} PRIVATE Boost::iostreams)
+target_link_libraries(${PROJECT_NAME} PRIVATE Boost::iostreams )
 
 add_custom_command(
         OUTPUT ${MVE_BUILD_DIR}/libmve.a

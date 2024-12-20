@@ -4,9 +4,8 @@
 
 #include <gnuplot-iostream.h>
 
-#include <CGAL/Polygon_mesh_processing/angle_and_area_smoothing.h>
 #include <CGAL/boost/graph/IO/OBJ.h>
-//#include <CGAL/Polygon_mesh_processing/smooth_shape.h>
+#include <CGAL/Polygon_mesh_processing/smooth_shape.h>
 
 #include "MeshAnalysis.h"
 #include "Histogram.h"
@@ -37,9 +36,9 @@ int main(int argc, char *argv[])
     //plotHistogram(histArea, "Histogramme des aires des faces", "Aire", "Nombre de faces", 2);
     //plotHistogram(histDihedral, "Histogramme des angles dièdres", "Angle (radians)", "Nombre d arêtes", 3);
 
-    //std::cin.get();
+    PMP::smooth_shape(mesh, 0.0001, PMP::parameters::number_of_iterations(10));
 
-    PMP::angle_and_area_smoothing(mesh, CGAL::parameters::number_of_iterations(5).use_safety_constraints(false));
+    //std::cin.get();
 
     // Sauvegarde du maillage lissé dans un nouveau fichier
     std::string outputFile = "models/suzanne_smoothed.obj";
