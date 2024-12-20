@@ -6,6 +6,8 @@
 #include <utility>
 #include <gnuplot-iostream.h>
 #include <algorithm>
+#include <unordered_map>
+#include <vector>
 
 std::vector<std::pair<int, int>> createValencyHistogram(const std::vector<int> &data) {
     std::vector<int> histValencies;
@@ -26,21 +28,22 @@ std::vector<std::pair<int, int>> createValencyHistogram(const std::vector<int> &
 }
 
 std::vector<std::pair<double, int>> createAreaHistogram(const std::vector<double> &data) {
-    std::vector<int> histAreas;
+    std::unordered_map<double, int> histAreas;
     for(int i = 0; i < data.size(); i++) {
-        if(histAreas.size() <= data[i])
-            histAreas.resize(data[i]+1);
 
-        histAreas[data[i]]++;
+        float val = std::round(data[i] * 1000.0) / 1000.0;
+
+        if(histAreas.contains(val))
+        {
+            histAreas.at(val)++;
+            continue;
+        }
+        histAreas.insert(std::make_pair(val, 1));
     }
 
-    std::vector<std::pair<double, int>> dataArea;
+    std::vector<std::pair<double, int>> vec(histAreas.begin(), histAreas.end());
 
-    for (size_t i = 0; i < histAreas.size(); ++i) {
-        dataArea.emplace_back(i, histAreas[i]);
-    }
-
-    return dataArea;
+    return vec;
 }
 
 std::vector<std::pair<double, int>> createDihedralHistogram(const std::vector<double> &data) {
@@ -66,13 +69,17 @@ std::vector<std::pair<double, int>> createDihedralHistogram(const std::vector<do
 
 template <typename T>
 void plotHistogram(const std::vector<std::pair<T, int>> &histogram, const std::string &title,
-                   const std::string &xlabel, const std::string &ylabel, int windowId) {
+                   const std::string &xlabel, const std::string &ylabel, int windowId, double xMin = 0, double xMax = 0) {
     Gnuplot gp;
     gp << "set term wxt " << windowId << "\n";
     gp << "set title '" << title << "'\n";
     gp << "set xlabel '" << xlabel << "'\n";
     gp << "set ylabel '" << ylabel << "'\n";
     gp << "set style fill solid 0.5\n";
+
+    if(xMin != 0)
+        gp << "set xrange [" << xMin << ":" << xMax << "]\n";
+
     gp << "plot '-' with boxes title ''\n";
     gp.send1d(histogram);
 }
