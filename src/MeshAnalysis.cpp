@@ -34,15 +34,38 @@ std::vector<int> calculateVertexValences(const Mesh &mesh) {
 
 std::vector<double> calculateFaceAreas(const Mesh &mesh) {
     std::vector<double> areas;
+
     for (auto face : mesh.faces()) {
-        auto halfedge = mesh.halfedge(face);
-        auto v1 = mesh.point(mesh.target(halfedge));
-        auto v2 = mesh.point(mesh.target(mesh.next(halfedge)));
-        auto v3 = mesh.point(mesh.target(mesh.next(mesh.next(halfedge))));
-        Kernel::Vector_3 v12 = v2 - v1;
-        Kernel::Vector_3 v13 = v3 - v1;
-        areas.push_back(std::sqrt(CGAL::cross_product(v12, v13).squared_length()) / 2.0);
+        // Extraire tous les sommets de la face
+        std::vector<Point> faceVertices;
+        auto start = mesh.halfedge(face);
+        auto curr = start;
+        do {
+            faceVertices.push_back(mesh.point(mesh.target(curr)));
+            curr = mesh.next(curr);
+        } while (curr != start);
+
+        double area = 0.0;
+
+        // Si la face est un triangle, on calcule directement
+        if (faceVertices.size() == 3) {
+            Vector v12 = faceVertices[1] - faceVertices[0];
+            Vector v13 = faceVertices[2] - faceVertices[0];
+            area = std::sqrt(CGAL::cross_product(v12, v13).squared_length()) / 2.0;
+        }
+        else {
+            // on calcule l'aire de (v0, v1, v2) et (v0, v2, v3).
+            for (size_t i = 1; i + 1 < faceVertices.size(); ++i) {
+                Vector v1 = faceVertices[i]   - faceVertices[0];
+                Vector v2 = faceVertices[i+1] - faceVertices[0];
+                double triArea = std::sqrt(CGAL::cross_product(v1, v2).squared_length()) / 2.0;
+                area += triArea;
+            }
+        }
+
+        areas.push_back(area);
     }
+
     return areas;
 }
 
