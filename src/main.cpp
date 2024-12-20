@@ -8,6 +8,21 @@
 #include <CGAL/Polygon_mesh_processing/smooth_shape.h>
 #include <CGAL/Polygon_mesh_processing/triangulate_faces.h>
 
+#include <CGAL/Surface_mesh.h>
+#include <CGAL/Polygon_mesh_processing/border.h>
+
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Surface_mesh.h>
+#include <CGAL/Polygon_mesh_processing/remesh.h>
+#include <CGAL/Polygon_mesh_processing/border.h>
+#include <CGAL/Polygon_mesh_processing/IO/polygon_mesh_io.h>
+
+#include <boost/iterator/function_output_iterator.hpp>
+
+#include <iostream>
+#include <string>
+#include <vector>
+
 #include "MeshAnalysis.h"
 #include "Histogram.h"
 
@@ -29,9 +44,10 @@ int main(int argc, char *argv[])
     }
 
     Mesh mesh;
-    if (!loadPLY(filePath, mesh)) {
-        std::cerr << "Erreur : Impossible de lire le fichier." << std::endl;
-        return EXIT_FAILURE;
+    if(!PMP::IO::read_polygon_mesh(filePath, mesh) || !CGAL::is_triangle_mesh(mesh))
+    {
+        std::cerr << "Invalid input." << std::endl;
+        return 1;
     }
 
     CGAL::Polygon_mesh_processing::triangulate_faces(mesh);
@@ -59,7 +75,20 @@ int main(int argc, char *argv[])
     plotHistogram(histArea, "Histogramme des aires des faces", "Aire", "Nombre de faces", 2);
     plotHistogram(histDihedral, "Histogramme des angles dièdres", "Angle (radians)", "Nombre d arêtes", 3);
 
-    PMP::smooth_shape(mesh, 0.0001, PMP::parameters::number_of_iterations(10));
+    PMP::smooth_shape(mesh, 0.0001, PMP::parameters::number_of_iterations(64));
+
+    valences = calculateVertexValences(mesh);
+    faceAreas = calculateFaceAreas(mesh);
+    dihedralAngles = calculateDihedralAngles(mesh);
+
+    histValence = createValencyHistogram(valences);
+    histArea = createAreaHistogram(faceAreas);
+    histDihedral = createDihedralHistogram(dihedralAngles);
+
+    plotHistogram(histValence, "Histogramme des valences des sommets", "Valence", "Nombre de sommets", 1);
+    plotHistogram(histArea, "Histogramme des aires des faces", "Aire", "Nombre de faces", 2);
+    plotHistogram(histDihedral, "Histogramme des angles dièdres", "Angle (radians)", "Nombre d arêtes", 3);
+
 
     //std::cin.get();
 

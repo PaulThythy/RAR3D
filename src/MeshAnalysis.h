@@ -13,6 +13,8 @@ typedef CGAL::Surface_mesh<Point> Mesh;
 
 bool loadPLY(const std::string &filePath, Mesh &mesh);
 
+bool loadOFF(const std::string &filePath, Mesh &mesh);
+
 bool loadOBJ(const std::string &filePath, Mesh &mesh);
 
 void printMeshInfos(const Mesh &mesh);

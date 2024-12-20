@@ -1,10 +1,16 @@
 #include "MeshAnalysis.h"
 #include <CGAL/IO/PLY/PLY_reader.h>
+#include <CGAL/Polyhedron_3.h>
 #include <cmath>
 
 bool loadPLY(const std::string &filePath, Mesh &mesh) {
     std::ifstream input(filePath, std::ios::binary);
     return input && CGAL::IO::read_PLY(input, mesh);
+}
+
+bool loadOFF(const std::string &filePath, Mesh &mesh) {
+    std::ifstream input(filePath);
+    return CGAL::IO::read_OFF(input, mesh);
 }
 
 bool loadOBJ(const std::string &filePath, Mesh &mesh) {
